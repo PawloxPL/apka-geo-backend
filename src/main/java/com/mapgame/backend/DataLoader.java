@@ -3,6 +3,7 @@ package com.mapgame.backend;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Arrays;
 
 @Component
 public class DataLoader implements CommandLineRunner {
