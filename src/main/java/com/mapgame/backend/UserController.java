@@ -2,6 +2,7 @@ package com.mapgame.backend;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -52,5 +53,15 @@ public class UserController {
             "message", "XP zaktualizowane!",
             "xp", user.getXp()
         ));
+    }
+
+    @GetMapping("/leaderboard")
+    public ResponseEntity<?> getXpLeaderboard() {
+        List<User> users = userRepository.findAllByOrderByXpDesc();
+        List<Map<String, Object>> mappedUsers = users.stream().map(u -> Map.<String, Object>of(
+            "username", u.getUsername(),
+            "xp", u.getXp()
+        )).toList();
+        return ResponseEntity.ok(mappedUsers);
     }
 }
