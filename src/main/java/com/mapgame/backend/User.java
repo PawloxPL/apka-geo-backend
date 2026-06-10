@@ -16,11 +16,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int xp = 0;
+
     public User() {}
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.xp = 0;
     }
 
     public Long getId() {
@@ -45,5 +49,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 }
