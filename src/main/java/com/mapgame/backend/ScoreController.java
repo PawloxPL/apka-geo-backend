@@ -1,10 +1,12 @@
 package com.mapgame.backend;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -46,5 +48,20 @@ public class ScoreController {
             scores = scoreRepository.findByGameModeOrderByScoreDescCreatedAtDesc(mode);
         }
         return ResponseEntity.ok(scores);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteScore(@PathVariable Long id, @RequestParam String username) {
+        Optional<Score> scoreOpt = scoreRepository.findById(id);
+        if (scoreOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Score score = scoreOpt.get();
+        if (!score.getUsername().equalsIgnoreCase(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("success", false, "message", "Nie masz uprawnień do usunięcia tego wyniku!"));
+        }
+        scoreRepository.delete(score);
+        return ResponseEntity.ok(Map.of("success", true, "message", "Wynik został usunięty!"));
     }
 }
